@@ -1,19 +1,11 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  Matches,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsEnum, IsNotEmpty, Matches } from 'class-validator';
 import { Roles } from '../../utils/enums.utils';
 
-export class UserDto {
+export class ResetPasswordDto {
   @IsNotEmpty()
-  userName: string;
+  otp: number;
 
   @IsNotEmpty()
-  @IsEmail()
   email: string;
 
   @IsNotEmpty()
@@ -27,12 +19,4 @@ export class UserDto {
   @IsNotEmpty()
   @IsEnum(Roles)
   role: Roles;
-
-  @IsOptional()
-  @Type(() => Number)
-  otp: number;
-
-  @IsOptional()
-  @Type(() => Date)
-  otpExpires: Date;
 }
