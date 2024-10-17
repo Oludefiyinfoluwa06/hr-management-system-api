@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -30,6 +32,7 @@ export class AuthController {
   }
 
   @Post('request-otp')
+  @HttpCode(200)
   async requestOtp(@Body() requestOtpDto: RequestOtpDto) {
     return await this.authService.requestOtp(requestOtpDto);
   }
@@ -38,5 +41,10 @@ export class AuthController {
   @HttpCode(200)
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return await this.authService.resetPassword(resetPasswordDto);
+  }
+
+  @Get('user/:id')
+  async getUser(@Param('id') id: string) {
+    return await this.authService.getUser(id);
   }
 }

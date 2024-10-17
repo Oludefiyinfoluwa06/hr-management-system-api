@@ -21,7 +21,7 @@ export class AuthService {
     private readonly mailService: MailerService,
   ) {}
   async validateUser(email: string, password: string) {
-    const user = await this.userService.findUser(email);
+    const user = await this.userService.findUserByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const { password, ...result } = user.toObject();
@@ -41,17 +41,23 @@ export class AuthService {
     };
 
     return {
-      ...user,
+      user: {
+        ...user,
+      },
       accessToken: this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
         expiresIn: 3600,
       }),
+      message: 'Login successful',
     };
   }
 
   async register(userDto: UserDto) {
     if (userDto.role === Roles.EMPLOYER) {
-      return await this.userService.createUser(userDto);
+      return {
+        user: await this.userService.createUser(userDto),
+        message: 'Registration successful',
+      };
     }
   }
 
@@ -59,7 +65,7 @@ export class AuthService {
     let user: User;
 
     if (requestOtpDto.role === Roles.EMPLOYER) {
-      user = await this.userService.findUser(requestOtpDto.email);
+      user = await this.userService.findUserByEmail(requestOtpDto.email);
     }
 
     if (!user) {
@@ -107,7 +113,7 @@ export class AuthService {
     let user: User;
 
     if (resetPasswordDto.role === Roles.EMPLOYER) {
-      user = await this.userService.findUser(resetPasswordDto.email);
+      user = await this.userService.findUserByEmail(resetPasswordDto.email);
     }
 
     const currentTime = new Date();
@@ -131,5 +137,9 @@ export class AuthService {
     } else {
       throw new BadRequestException({ message: 'Invalid or expired OTP' });
     }
+  }
+
+  async getUser(id: string) {
+    return await this.userService.findUserById(id);
   }
 }

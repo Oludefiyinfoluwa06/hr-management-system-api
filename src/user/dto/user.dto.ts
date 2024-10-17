@@ -10,6 +10,9 @@ import { Roles } from '../../utils/enums.utils';
 
 export class UserDto {
   @IsNotEmpty()
+  companyName: string;
+
+  @IsNotEmpty()
   userName: string;
 
   @IsNotEmpty()
