@@ -8,10 +8,11 @@ import { UserService } from '../user/user.service';
 import { LocalStrategy } from './strategy/local.strategy';
 import { User, UserSchema } from '../user/schema/user.schema';
 import { UserModule } from '../user/user.module';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, UserService, JwtService, LocalStrategy],
+  providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
   imports: [
     UserModule,
     PassportModule,
