@@ -34,20 +34,15 @@ export class AuthService {
   async login(user: User) {
     const payload = {
       email: user.email,
-      sub: {
-        _id: user._id,
-        userName: user.userName,
-      },
+      _id: user._id,
+      role: user.role,
     };
 
     return {
       user: {
         ...user,
       },
-      accessToken: this.jwtService.sign(payload, {
-        secret: process.env.JWT_SECRET,
-        expiresIn: 3600,
-      }),
+      accessToken: this.jwtService.sign(payload),
       message: 'Login successful',
     };
   }
@@ -140,6 +135,10 @@ export class AuthService {
   }
 
   async getUser(id: string) {
-    return await this.userService.findUserById(id);
+    const user = await this.userService.findUserById(id);
+
+    const { password, ...result } = user.toObject();
+
+    return result;
   }
 }
