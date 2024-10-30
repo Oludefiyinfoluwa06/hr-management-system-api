@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -49,6 +50,12 @@ export class AuthService {
   }
 
   async register(userDto: UserDto) {
+    const existingUser = await this.userService.findUserByEmail(userDto.email);
+
+    if (existingUser) {
+      throw new ConflictException('User already registered');
+    }
+
     return {
       user: await this.userService.createUser(userDto),
       message: 'Registration successful',

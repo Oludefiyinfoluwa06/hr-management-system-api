@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { User } from './schema/user.schema';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Roles } from '../utils/enums.utils';
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,11 @@ export class UserService {
 
   async createUser(userDto: UserDto) {
     const hashedPassword = await bcrypt.hash(userDto.password, 10);
-    const companyId = uuidv4();
+    let companyId: string;
+
+    if (userDto.role === Roles.EMPLOYER) {
+      companyId = uuidv4();
+    }
 
     const user = await this.userModel.create({
       companyName: userDto.companyName,

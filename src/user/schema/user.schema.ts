@@ -19,7 +19,7 @@ export class User extends Document {
   @Prop({ required: true })
   role: Roles;
 
-  @Prop({ required: true })
+  @Prop({ default: null })
   companyId: string;
 
   @Prop({ default: null })
