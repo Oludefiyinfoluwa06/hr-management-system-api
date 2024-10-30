@@ -36,6 +36,7 @@ export class AuthService {
       email: user.email,
       _id: user._id,
       role: user.role,
+      companyId: user.companyId,
     };
 
     return {
@@ -48,12 +49,10 @@ export class AuthService {
   }
 
   async register(userDto: UserDto) {
-    if (userDto.role === Roles.EMPLOYER) {
-      return {
-        user: await this.userService.createUser(userDto),
-        message: 'Registration successful',
-      };
-    }
+    return {
+      user: await this.userService.createUser(userDto),
+      message: 'Registration successful',
+    };
   }
 
   async requestOtp(requestOtpDto: RequestOtpDto) {
