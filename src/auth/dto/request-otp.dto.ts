@@ -1,10 +1,6 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
-import { Roles } from '../../utils/enums.utils';
+import { IsNotEmpty } from 'class-validator';
 
 export class RequestOtpDto {
   @IsNotEmpty()
   email: string;
-
-  @IsEnum(Roles)
-  role: Roles;
 }

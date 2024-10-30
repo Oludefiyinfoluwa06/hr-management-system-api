@@ -3,17 +3,18 @@ import {
   Controller,
   Get,
   HttpCode,
-  Param,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guard/local-auth.guard';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { User } from '../utils/types.utils';
 import { UserDto } from '../user/dto/user.dto';
 import { RequestOtpDto } from './dto/request-otp.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { AuthUser } from './decorators/auth-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -43,8 +44,9 @@ export class AuthController {
     return await this.authService.resetPassword(resetPasswordDto);
   }
 
-  @Get('user/:id')
-  async getUser(@Param('id') id: string) {
-    return await this.authService.getUser(id);
+  @UseGuards(JwtAuthGuard)
+  @Get('user')
+  async getUser(@AuthUser() user: any) {
+    return await this.authService.getUser(user.userId);
   }
 }

@@ -56,11 +56,7 @@ export class AuthService {
   }
 
   async requestOtp(requestOtpDto: RequestOtpDto) {
-    let user: User;
-
-    if (requestOtpDto.role === Roles.EMPLOYER) {
-      user = await this.userService.findUserByEmail(requestOtpDto.email);
-    }
+    const user = await this.userService.findUserByEmail(requestOtpDto.email);
 
     if (!user) {
       throw new NotFoundException('This email does not exist');
@@ -92,7 +88,7 @@ export class AuthService {
     `;
 
     this.mailService.sendMail({
-      from: `Olude Fiyinfoluwa <${process.env.EMAIL_USERNAME}>`,
+      from: `Khamis Idaro <${process.env.EMAIL_USERNAME}>`,
       to: requestOtpDto.email,
       subject: 'OTP Request',
       html: message,
@@ -104,11 +100,7 @@ export class AuthService {
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
-    let user: User;
-
-    if (resetPasswordDto.role === Roles.EMPLOYER) {
-      user = await this.userService.findUserByEmail(resetPasswordDto.email);
-    }
+    const user = await this.userService.findUserByEmail(resetPasswordDto.email);
 
     const currentTime = new Date();
     const otpExpires = new Date(user.otpExpires);
