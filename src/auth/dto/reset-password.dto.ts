@@ -1,5 +1,4 @@
-import { IsEnum, IsNotEmpty, Matches } from 'class-validator';
-import { Roles } from '../../utils/enums.utils';
+import { IsNotEmpty, Matches } from 'class-validator';
 
 export class ResetPasswordDto {
   @IsNotEmpty()
@@ -15,8 +14,4 @@ export class ResetPasswordDto {
     one lowercase letter, one digit and one special character`,
   })
   password: string;
-
-  @IsNotEmpty()
-  @IsEnum(Roles)
-  role: Roles;
 }
