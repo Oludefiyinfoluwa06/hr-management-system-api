@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { EmployeeModule } from './employee/employee.module';
 import { config } from './config';
+import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { config } from './config';
     AuthModule,
     UserModule,
     EmployeeModule,
+    JobsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

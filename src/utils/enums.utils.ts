@@ -9,3 +9,11 @@ export enum EducationalLevels {
   MASTERS_DEGREE = 'MASTERS DEGREE',
   PHD = 'PHD'
 }
+
+export enum EmploymentType {
+  FULL_TIME = 'FULL TIME',
+  PART_TIME = 'PART TIME',
+  CONTRACT = 'CONTRACT',
+  FREELANCE = 'FREELANCE',
+  INTERNSHIP = 'INTERNSHIP',
+}
