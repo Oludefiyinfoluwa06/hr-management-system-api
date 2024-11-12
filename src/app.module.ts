@@ -10,6 +10,7 @@ import { EmployeeModule } from './employee/employee.module';
 import { config } from './config';
 import { JobModule } from './job/job.module';
 import { JobApplicationModule } from './job-application/job-application.module';
+import { JobSeekerModule } from './job-seeker/job-seeker.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { JobApplicationModule } from './job-application/job-application.module';
     EmployeeModule,
     JobModule,
     JobApplicationModule,
+    JobSeekerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
