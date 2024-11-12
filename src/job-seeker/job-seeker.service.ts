@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JobSeeker } from './schema/job-seeker.schema';
@@ -12,6 +12,12 @@ export class JobSeekerService {
   ) {}
 
   async create(authUser: any, createJobSeekerDto: CreateJobSeekerDto) {
+    const existingJobSeeker = await this.jobSeekerModel.findOne({ email: createJobSeekerDto.email });
+
+    if (existingJobSeeker) {
+      throw new ConflictException('An account with this email exists already');
+    }
+
     const newJobSeeker = await this.jobSeekerModel.create({
       ...createJobSeekerDto,
       userId: authUser.userId,
