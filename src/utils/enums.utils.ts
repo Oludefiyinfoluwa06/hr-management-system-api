@@ -7,7 +7,7 @@ export enum EducationalLevels {
   DIPLOMA = 'DIPLOMA',
   BACHELOR_DEGREE = 'BACHELOR\'S DEGREE',
   MASTERS_DEGREE = 'MASTERS DEGREE',
-  PHD = 'PHD'
+  PHD = 'PHD',
 }
 
 export enum EmploymentType {
@@ -16,4 +16,10 @@ export enum EmploymentType {
   CONTRACT = 'CONTRACT',
   FREELANCE = 'FREELANCE',
   INTERNSHIP = 'INTERNSHIP',
+}
+
+export enum ApplicationStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  DECLINED = 'DECLINED',
 }

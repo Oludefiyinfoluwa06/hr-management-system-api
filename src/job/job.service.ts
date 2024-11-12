@@ -6,7 +6,7 @@ import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 
 @Injectable()
-export class JobsService {
+export class JobService {
   constructor(@InjectModel(Job.name) private jobModel: Model<Job>) {}
 
   async getAllJobs(page: number = 1, limit: number = 10) {
@@ -34,8 +34,8 @@ export class JobsService {
     return job;
   }
 
-  async createJob(createJobDto: CreateJobDto) {
-    const newJob = new this.jobModel(createJobDto);
+  async createJob(createJobDto: CreateJobDto, authUser: any) {
+    const newJob = new this.jobModel({ ...createJobDto, companyId: authUser.companyId });
     return newJob.save();
   }
 

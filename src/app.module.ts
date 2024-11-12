@@ -8,7 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { EmployeeModule } from './employee/employee.module';
 import { config } from './config';
-import { JobsModule } from './jobs/jobs.module';
+import { JobModule } from './job/job.module';
+import { JobApplicationModule } from './job-application/job-application.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { JobsModule } from './jobs/jobs.module';
     AuthModule,
     UserModule,
     EmployeeModule,
-    JobsModule,
+    JobModule,
+    JobApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

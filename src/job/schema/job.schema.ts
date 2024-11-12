@@ -25,6 +25,9 @@ export class Job extends Document {
   @Prop({ default: false })
   remote: boolean;
 
+  @Prop({ required: true })
+  companyId: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 
