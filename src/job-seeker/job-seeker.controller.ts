@@ -3,13 +3,8 @@ import { JobSeekerService } from './job-seeker.service';
 import { CreateJobSeekerDto } from './dto/create-job-seeker.dto';
 import { UpdateJobSeekerDto } from './dto/update-job-seeker.dto';
 import { AuthUser } from '../auth/decorators/auth-user.decorator';
-import { UserRoles } from '../auth/decorators/role.decorator';
-import { Roles } from '../utils/enums.utils';
-import { RolesGuard } from '../auth/guard/roles.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
-@UserRoles(Roles.JOB_SEEKER)
-@UseGuards(RolesGuard)
 @UseGuards(JwtAuthGuard)
 @Controller('job-seeker')
 export class JobSeekerController {

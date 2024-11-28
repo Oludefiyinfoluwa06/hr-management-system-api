@@ -13,9 +13,6 @@ import {
 import { EmployeeService } from './employee.service';
 import { EmployeeDto } from './dto/employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { UserRoles } from '../auth/decorators/role.decorator';
-import { Roles } from '../utils/enums.utils';
-import { RolesGuard } from '../auth/guard/roles.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { AuthUser } from '../auth/decorators/auth-user.decorator';
 import { CreatePasswordDto } from './dto/create-password.dto';
@@ -25,8 +22,6 @@ import { LoginDto } from './dto/login.dto';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @UserRoles(Roles.EMPLOYER)
-  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() employeeDto: EmployeeDto, @AuthUser() authUser: any) {
@@ -44,8 +39,6 @@ export class EmployeeController {
     return this.employeeService.login(loginDto);
   }
 
-  @UserRoles(Roles.EMPLOYER)
-  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@AuthUser() authUser: any,
@@ -70,8 +63,6 @@ export class EmployeeController {
     return this.employeeService.update(id, updateEmployeeDto);
   }
 
-  @UserRoles(Roles.EMPLOYER)
-  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

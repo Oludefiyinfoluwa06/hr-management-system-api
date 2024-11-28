@@ -35,11 +35,11 @@ export class EmployeeService {
       throw new NotFoundException('Company not found');
     }
 
-    const fifteenYearsAgo = new Date();
-    fifteenYearsAgo.setFullYear(fifteenYearsAgo.getFullYear() - 15);
+    const eighteenYearsAgo = new Date();
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-    if (new Date(employeeDto.dateOfBirth) > fifteenYearsAgo) {
-      throw new BadRequestException('Employee must be at least 15 years old');
+    if (new Date(employeeDto.dateOfBirth) > eighteenYearsAgo) {
+      throw new BadRequestException('Employee must be at least 18 years old');
     }
 
     const employmentStartDate = new Date(employeeDto.employmentStartDate);

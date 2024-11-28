@@ -5,8 +5,8 @@ export enum Roles {
 
 export enum EducationalLevels {
   DIPLOMA = 'DIPLOMA',
-  BACHELOR_DEGREE = 'BACHELOR\'S DEGREE',
-  MASTERS_DEGREE = 'MASTERS DEGREE',
+  BACHELORS_DEGREE = 'BACHELORS_DEGREE',
+  MASTERS_DEGREE = 'MASTERS_DEGREE',
   PHD = 'PHD',
 }
 
