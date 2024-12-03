@@ -11,6 +11,7 @@ import { config } from './config';
 import { JobModule } from './job/job.module';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { JobSeekerModule } from './job-seeker/job-seeker.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { JobSeekerModule } from './job-seeker/job-seeker.module';
     JobModule,
     JobApplicationModule,
     JobSeekerModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
