@@ -9,4 +9,7 @@ export class CreateJobApplicationDto {
 
   @IsNotEmpty()
   coverLetter: string;
+
+  @IsNotEmpty()
+  resumeLink: string;
 }

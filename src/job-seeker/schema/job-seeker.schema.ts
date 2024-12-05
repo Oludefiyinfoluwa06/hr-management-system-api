@@ -8,26 +8,29 @@ export class JobSeeker extends Document {
   @Prop({ type: SchemaTypes.ObjectId, ref: User.name, required: true })
   userId: Types.ObjectId;
 
-  @Prop({ type: String, required: true })
+  @Prop()
   fullName: string;
 
-  @Prop({ type: String, required: true, unique: true })
+  @Prop()
   email: string;
 
-  @Prop({ type: String, required: true })
+  @Prop()
   phoneNumber: string;
 
-  @Prop({ type: String })
+  @Prop()
   location: string;
 
-  @Prop({ type: String })
+  @Prop()
   linkedInProfile: string;
 
-  @Prop({ type: String, required: true })
+  @Prop()
   professionalSummary: string;
 
-  @Prop({ type: String, required: true, enum: EducationalLevels })
+  @Prop()
   educationalLevel: EducationalLevels;
+
+  @Prop()
+  profilePicture: string;
 }
 
 export const JobSeekerSchema = SchemaFactory.createForClass(JobSeeker);

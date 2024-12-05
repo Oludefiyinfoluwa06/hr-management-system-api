@@ -12,5 +12,6 @@ import { JobSeeker, JobSeekerSchema } from './schema/job-seeker.schema';
   ],
   controllers: [JobSeekerController],
   providers: [JobSeekerService],
+  exports: [JobSeekerService],
 })
 export class JobSeekerModule {}

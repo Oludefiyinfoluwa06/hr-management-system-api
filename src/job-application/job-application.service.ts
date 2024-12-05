@@ -5,38 +5,35 @@ import { JobApplication } from './schema/job-application.schema';
 import { CreateJobApplicationDto } from './dto/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
 import { Job } from '../job/schema/job.schema';
+import { JobSeeker } from '../job-seeker/schema/job-seeker.schema';
 import { User } from '../user/schema/user.schema';
+import { JobSeekerService } from '../job-seeker/job-seeker.service';
 
 @Injectable()
 export class JobApplicationService {
   constructor(
     @InjectModel(JobApplication.name) private jobApplicationModel: Model<JobApplication>,
     @InjectModel(Job.name) private jobModel: Model<Job>,
+    @InjectModel(JobSeeker.name) private jobSeekerModel: Model<JobSeeker>,
     @InjectModel(User.name) private userModel: Model<User>,
+    private jobSeekerService: JobSeekerService,
   ) {}
 
   async getAllApplications(authUser: any) {
-    const jobApplications = await this.jobApplicationModel.find({ applicantId: authUser.userId });
-
-    if (!jobApplications) {
-      throw new NotFoundException('You have not applied for any job');
-    }
-
-    return jobApplications;
+    const jobSeeker = await this.jobSeekerService.findOne(authUser);
+    return await this.jobApplicationModel
+      .find({ applicantId: jobSeeker.userId })
+      .populate([{ path: 'jobId', select: 'title location employmentType remote' }]);
   }
 
   async getCompanyApplications(authUser: any) {
-    const jobApplications = await this.jobApplicationModel.find({ companyId: authUser.companyId });
-
-    if (!jobApplications) {
-      throw new NotFoundException('There are no applications for this job');
-    }
-
-    return jobApplications;
+    return await this.jobApplicationModel
+      .find({ companyId: authUser.companyId })
+      .populate([{ path: 'jobId', select: 'title location employmentType remote' }]);
   }
 
   async getApplicationById(id: string) {
-    const application = await this.jobApplicationModel.findById(id)
+    const application = await this.jobApplicationModel.findById(id);
 
     if (!application) {
       throw new NotFoundException('Application not found');

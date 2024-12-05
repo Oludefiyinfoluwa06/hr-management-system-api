@@ -26,6 +26,5 @@ export class CreateCompanyDto {
   mission: string;
 
   @IsOptional()
-  @IsUrl()
-  logoUrl?: string;
+  logoUrl: string;
 }

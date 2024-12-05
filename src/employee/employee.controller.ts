@@ -15,8 +15,6 @@ import { EmployeeDto } from './dto/employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { AuthUser } from '../auth/decorators/auth-user.decorator';
-import { CreatePasswordDto } from './dto/create-password.dto';
-import { LoginDto } from './dto/login.dto';
 
 @Controller('employee')
 export class EmployeeController {
@@ -26,17 +24,6 @@ export class EmployeeController {
   @Post()
   create(@Body() employeeDto: EmployeeDto, @AuthUser() authUser: any) {
     return this.employeeService.create(employeeDto, authUser);
-  }
-
-  @Post('create-password')
-  createPassword(@Body() createPasswordDto: CreatePasswordDto) {
-    return this.employeeService.createPassword(createPasswordDto);
-  }
-
-  @Post('login')
-  @HttpCode(200)
-  login(@Body() loginDto: LoginDto) {
-    return this.employeeService.login(loginDto);
   }
 
   @UseGuards(JwtAuthGuard)

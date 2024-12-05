@@ -9,7 +9,7 @@ import { Type } from 'class-transformer';
 import { Roles } from '../../utils/enums.utils';
 
 export class UserDto {
-  @IsNotEmpty()
+  @IsOptional()
   companyName: string;
 
   @IsNotEmpty()

@@ -21,6 +21,7 @@ export class JobService {
       results,
       totalPages: Math.ceil(totalItems / limit),
       currentPage: page,
+      totalItems,
     };
   }
 

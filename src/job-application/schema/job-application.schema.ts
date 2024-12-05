@@ -1,25 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaTypes, Types } from 'mongoose';
-import { User } from '../../user/schema/user.schema';
+import { JobSeeker } from '../../job-seeker/schema/job-seeker.schema';
 import { Job } from '../../job/schema/job.schema';
-import { ApplicationStatus } from '../../utils/enums.utils';
 
 @Schema()
 export class JobApplication extends Document {
-  @Prop({ type: SchemaTypes.ObjectId, ref: User.name })
+  @Prop({ type: SchemaTypes.ObjectId, ref: JobSeeker.name })
   applicantId: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop()
   companyId: string;
 
   @Prop({ type: SchemaTypes.ObjectId, ref: Job.name })
   jobId: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop()
   coverLetter: string;
 
-  @Prop({ required: true, enum: ApplicationStatus, default: ApplicationStatus.PENDING })
-  status: ApplicationStatus;
+  @Prop()
+  resumeLink: string;
 }
 
 export const JobApplicationSchema = SchemaFactory.createForClass(JobApplication);

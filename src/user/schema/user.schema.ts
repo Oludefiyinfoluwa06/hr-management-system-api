@@ -4,19 +4,19 @@ import { Roles } from '../../utils/enums.utils';
 
 @Schema()
 export class User extends Document {
-  @Prop({ required: true })
+  @Prop({ default: null })
   companyName: string;
 
-  @Prop({ required: true })
+  @Prop()
   userName: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop()
   email: string;
 
-  @Prop({ required: true })
+  @Prop()
   password: string;
 
-  @Prop({ required: true })
+  @Prop()
   role: Roles;
 
   @Prop({ default: null })
