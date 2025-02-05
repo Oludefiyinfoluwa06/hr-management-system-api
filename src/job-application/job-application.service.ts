@@ -62,6 +62,12 @@ export class JobApplicationService {
       throw new NotFoundException('User not found');
     }
 
+    const jobSeeker = await this.jobSeekerModel.findOne({ userId: authUser.userId });
+
+    if (!jobSeeker) {
+      throw new NotFoundException('Set up your profile');
+    }
+
     const existingApplication = await this.jobApplicationModel.findOne({
       applicantId: authUser.userId,
       jobId: createJobApplicationDto.jobId,
