@@ -25,6 +25,26 @@ export class JobService {
     };
   }
 
+  async getCompanyJobs(authUser: any, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+
+    const [results, totalItems] = await Promise.all([
+      this.jobModel.find({ companyId: authUser.companyId }).skip(skip).limit(limit),
+      this.jobModel.countDocuments({ companyId: authUser.companyId }),
+    ]);
+
+    return {
+      results,
+      totalPages: Math.ceil(totalItems / limit),
+      currentPage: page,
+      totalItems,
+    };
+  }
+
+  async getAllCompanyJobs(authUser: any) {
+    return await this.jobModel.find({ companyId: authUser.companyId });
+  }
+
   async getJobById(id: string) {
     const job = await this.jobModel.findById(id);
 

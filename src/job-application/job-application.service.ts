@@ -20,9 +20,14 @@ export class JobApplicationService {
   ) {}
 
   async getAllApplications(authUser: any) {
-    const jobSeeker = await this.jobSeekerService.findOne(authUser);
+    const user = await this.userModel.findById(authUser.userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     return await this.jobApplicationModel
-      .find({ applicantId: jobSeeker.userId })
+      .find({ applicantId: authUser.userId })
       .populate([{ path: 'jobId', select: 'title location employmentType remote' }]);
   }
 
