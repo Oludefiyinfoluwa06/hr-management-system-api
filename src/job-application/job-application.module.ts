@@ -7,6 +7,7 @@ import { User, UserSchema } from '../user/schema/user.schema';
 import { Job, JobSchema } from '../job/schema/job.schema';
 import { JobSeeker, JobSeekerSchema } from '../job-seeker/schema/job-seeker.schema';
 import { JobSeekerModule } from '../job-seeker/job-seeker.module';
+import { InterviewSchedule, InterviewScheduleSchema } from './schema/schedule.schema';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JobSeekerModule } from '../job-seeker/job-seeker.module';
       { name: Job.name, schema: JobSchema },
       { name: User.name, schema: UserSchema },
       { name: JobSeeker.name, schema: JobSeekerSchema },
+      { name: InterviewSchedule.name, schema: InterviewScheduleSchema },
     ]),
   ],
   controllers: [JobApplicationController],

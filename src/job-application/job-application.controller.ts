@@ -4,6 +4,7 @@ import { CreateJobApplicationDto } from './dto/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
 import { AuthUser } from '../auth/decorators/auth-user.decorator';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { ScheduleDto } from './dto/schedule.dto';
 
 @Controller('job-applications')
 export class JobApplicationController {
@@ -11,31 +12,43 @@ export class JobApplicationController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getAllApplications(@AuthUser() authUser: any) {
+  getAllApplications(@AuthUser() authUser: any) {
     return this.jobApplicationService.getAllApplications(authUser);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/company')
-  async getCompanyApplications(@AuthUser() authUser: any) {
+  @Get('company')
+  getCompanyApplications(@AuthUser() authUser: any) {
     return this.jobApplicationService.getCompanyApplications(authUser);
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('schedule')
+  getScheduledMeetings(@AuthUser() authUser: any) {
+    return this.jobApplicationService.getScheduledMeetings(authUser);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('archives')
+  getArchivedApplications(@AuthUser() authUser: any) {
+    return this.jobApplicationService.getArchivedApplications(authUser);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getApplicationById(@Param('id') id: string) {
+  getApplicationById(@Param('id') id: string) {
     return this.jobApplicationService.getApplicationById(id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('job/:jobId')
-  async getApplicationsByJob(@Param('jobId') jobId: string) {
+  getApplicationsByJob(@Param('jobId') jobId: string) {
     return this.jobApplicationService.getApplicationsByJob(jobId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createApplication(
+  createApplication(
     @Body() createJobApplicationDto: CreateJobApplicationDto,
     @AuthUser() authUser: any
   ) {
@@ -43,8 +56,23 @@ export class JobApplicationController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('schedule')
+  scheduleMeeting(@Body() dto: ScheduleDto) {
+    return this.jobApplicationService.scheduleMeeting(dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('archives/:applicationId')
+  archiveOrReacceptApplication(
+    @Param('applicationId') applicationId: string,
+    @Body('isArchived') isArchived: boolean,
+  ) {
+    return this.jobApplicationService.archiveOrReacceptApplication(applicationId, isArchived);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  async updateApplication(
+  updateApplication(
     @Param('id') id: string,
     @Body() updateJobApplicationDto: UpdateJobApplicationDto,
   ) {
@@ -53,7 +81,7 @@ export class JobApplicationController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteApplication(@Param('id') id: string) {
+  deleteApplication(@Param('id') id: string) {
     return this.jobApplicationService.deleteApplication(id);
   }
 }
