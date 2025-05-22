@@ -34,7 +34,7 @@ export class JobSeekerService {
     const jobSeeker = await this.jobSeekerModel.findOne({ userId: authUser.userId });
 
     if (!jobSeeker) {
-      throw new NotFoundException('Profile does not exist');
+      throw new NotFoundException('Set up your profile');
     }
 
     return jobSeeker;
@@ -47,7 +47,7 @@ export class JobSeekerService {
       { new: true },
     );
     if (!updatedJobSeeker) {
-      throw new NotFoundException('Profile does not exist');
+      throw new NotFoundException('Set up your profile');
     }
     return updatedJobSeeker;
   }

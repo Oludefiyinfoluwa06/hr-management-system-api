@@ -7,7 +7,8 @@ import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
 import { Job } from '../job/schema/job.schema';
 import { JobSeeker } from '../job-seeker/schema/job-seeker.schema';
 import { User } from '../user/schema/user.schema';
-import { JobSeekerService } from '../job-seeker/job-seeker.service';
+import { ScheduleDto } from './dto/schedule.dto';
+import { InterviewSchedule } from './schema/schedule.schema';
 
 @Injectable()
 export class JobApplicationService {
@@ -16,24 +17,39 @@ export class JobApplicationService {
     @InjectModel(Job.name) private jobModel: Model<Job>,
     @InjectModel(JobSeeker.name) private jobSeekerModel: Model<JobSeeker>,
     @InjectModel(User.name) private userModel: Model<User>,
-    private jobSeekerService: JobSeekerService,
+    @InjectModel(InterviewSchedule.name) private interviewScheduleModel: Model<InterviewSchedule>,
   ) {}
 
   async getAllApplications(authUser: any) {
-    const jobSeeker = await this.jobSeekerService.findOne(authUser);
+    const user = await this.userModel.findById(authUser.userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const jobSeeker = await this.jobSeekerModel.findOne({ userId: authUser.userId });
+
+    if (!jobSeeker) {
+      throw new NotFoundException('Set up your profile');
+    }
+
     return await this.jobApplicationModel
-      .find({ applicantId: jobSeeker.userId })
-      .populate([{ path: 'jobId', select: 'title location employmentType remote' }]);
+      .find({ applicantId: jobSeeker._id })
+      .populate([{ path: 'jobId', select: 'title location employmentType remote' }, { path: 'applicantId' }]);
   }
 
   async getCompanyApplications(authUser: any) {
-    return await this.jobApplicationModel
-      .find({ companyId: authUser.companyId })
-      .populate([{ path: 'jobId', select: 'title location employmentType remote' }]);
+    return this.jobApplicationModel
+      .find({ companyId: authUser.companyId, isArchived: false })
+      .lean()
+      .populate([
+        { path: 'jobId', select: 'title location employmentType remote' },
+        { path: 'applicantId', select: 'fullName email' }
+      ]);
   }
 
   async getApplicationById(id: string) {
-    const application = await this.jobApplicationModel.findById(id);
+    const application = await this.jobApplicationModel.findById(id).populate('applicantId');
 
     if (!application) {
       throw new NotFoundException('Application not found');
@@ -43,7 +59,7 @@ export class JobApplicationService {
   }
 
   async getApplicationsByJob(jobId: string) {
-    return await this.jobApplicationModel.find({ jobId: new Types.ObjectId(jobId) });
+    return await this.jobApplicationModel.find({ jobId: new Types.ObjectId(jobId), isArchived: false }).populate('applicantId');
   }
 
   async createApplication(
@@ -62,8 +78,14 @@ export class JobApplicationService {
       throw new NotFoundException('User not found');
     }
 
+    const jobSeeker = await this.jobSeekerModel.findOne({ userId: authUser.userId });
+
+    if (!jobSeeker) {
+      throw new NotFoundException('Set up your profile');
+    }
+
     const existingApplication = await this.jobApplicationModel.findOne({
-      applicantId: authUser.userId,
+      applicantId: jobSeeker._id,
       jobId: createJobApplicationDto.jobId,
     });
 
@@ -73,7 +95,7 @@ export class JobApplicationService {
 
     const newApplication = new this.jobApplicationModel({
       ...createJobApplicationDto,
-      applicantId: new Types.ObjectId(authUser.userId),
+      applicantId: new Types.ObjectId(String(jobSeeker._id)),
       jobId: new Types.ObjectId(createJobApplicationDto.jobId),
     });
 
@@ -102,5 +124,67 @@ export class JobApplicationService {
     }
 
     return { message: 'Application deleted successfully' };
+  }
+
+  async scheduleMeeting(dto: ScheduleDto) {
+    const application = await this.jobApplicationModel.findById(dto.applicationId).populate('applicantId jobId');
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    const schedule = await this.interviewScheduleModel.create({
+      applicantId: application.applicantId,
+      applicationId: application._id,
+      meetingTime: dto.meetingTime,
+      meetingLink: dto.meetingLink,
+    });
+
+    return { message: 'Interview schedule saved', schedule };
+  }
+
+  async getScheduledMeetings(authUser: any) {
+    const jobSeeker = await this.jobSeekerModel.findOne({ userId: authUser.userId });
+
+    if (!jobSeeker) {
+      throw new NotFoundException('Set up your profile');
+    }
+
+    const schedules = await this.interviewScheduleModel
+      .find({ applicantId: jobSeeker._id })
+      .populate({
+        path: 'applicationId',
+        populate: {
+          path: 'jobId',
+          select: 'title companyName location employmentType',
+        },
+      })
+      .exec();
+
+    if (!schedules) {
+      throw new NotFoundException('There are scheduled interviews');
+    }
+
+    return schedules;
+  }
+
+  async archiveOrReacceptApplication(applicationId: string, isArchived: boolean) {
+    const application = await this.jobApplicationModel.findById(applicationId);
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    return await this.jobApplicationModel.findByIdAndUpdate(applicationId, { isArchived }, { new: true });
+  }
+
+  async getArchivedApplications(authUser: any) {
+    return this.jobApplicationModel
+      .find({ companyId: authUser.companyId, isArchived: true })
+      .lean()
+      .populate([
+        { path: 'jobId', select: 'title location employmentType remote' },
+        { path: 'applicantId', select: 'fullName email' }
+      ]);
   }
 }

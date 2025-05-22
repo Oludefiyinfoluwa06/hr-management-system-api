@@ -19,6 +19,9 @@ export class JobApplication extends Document {
 
   @Prop()
   resumeLink: string;
+
+  @Prop({ default: false })
+  isArchived: boolean;
 }
 
 export const JobApplicationSchema = SchemaFactory.createForClass(JobApplication);
